@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import jfxtras.scene.control.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="VBox" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <center>
+                <CalendarTextField fx:id="datePicker" BorderPane.alignment="CENTER" />
+            </center>
+            <left>
+                <Button fx:id="decDayButton" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#decDayHandle" prefHeight="25.0" text="◄" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Arial Bold" size="11.0" />
+                    </font>
+                </Button>
+            </left>
+            <right>
+                <Button fx:id="incDayButton" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#incDayHandle" prefHeight="25.0" text="►" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets left="2.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font name="Arial Bold" size="11.0" />
+                    </font>
+                </Button>
+            </right>
+        </BorderPane>
+        <GridPane fx:id="daysPane">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <RadioButton fx:id="wdMo" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="weekDaysToggleGroup" />
+                    </toggleGroup>
+               <font>
+                  <Font size="10.0" />
+               </font>
+                </RadioButton>
+                <RadioButton fx:id="wdTu" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="1">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+                <RadioButton fx:id="wdWd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="2">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+                <RadioButton fx:id="wdTh" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="3">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+                <RadioButton fx:id="wdFr" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="4">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+                <RadioButton fx:id="wdSt" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="5">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+                <RadioButton fx:id="wdSn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weekdayHandle" text="RadioButton" toggleGroup="$weekDaysToggleGroup" GridPane.columnIndex="6">
+               <font>
+                  <Font size="10.0" />
+               </font></RadioButton>
+            </children>
+        </GridPane>
+    </children>
+</fx:root>
