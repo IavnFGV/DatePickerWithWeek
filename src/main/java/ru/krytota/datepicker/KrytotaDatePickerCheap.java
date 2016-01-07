@@ -1,26 +1,26 @@
 package ru.krytota.datepicker;
 
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.scene.control.CalendarTextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.ToDoubleBiFunction;
 
 import static java.util.Arrays.asList;
 
@@ -47,13 +47,13 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
                 radioButton.getStyleClass().remove(CLASS_RADIO_BUTTON);
                 radioButton.getStyleClass().add(CLASS_TOGGLE_BUTTON);
             };
-    private Map<String, String> fxIdToCaptionMap = new HashMap<>();
-
-    private Consumer<RadioButton> setCaptionById = radioButton ->
-            radioButton.setText(fxIdToCaptionMap.getOrDefault
-                    (radioButton.getId(), radioButton.getId())
-            );
     private BooleanProperty showWeekGreed = new SimpleBooleanProperty(true);
+
+
+    public KrytotaDatePickerCheap(boolean showWeekGreed) {
+        this();
+        setShowWeekGreed(showWeekGreed);
+    }
 
     public KrytotaDatePickerCheap() {
         super();
@@ -71,23 +71,6 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
 
     public CalendarTextField getDatePicker() {
         return datePicker;
-    }
-
-    public void setWeekdaysCaptions(List<String> weekDays) {
-        fxIdToCaptionMap.put("wdMo", weekDays.get(0));
-        fxIdToCaptionMap.put("wdTu", weekDays.get(1));
-        fxIdToCaptionMap.put("wdWd", weekDays.get(2));
-        fxIdToCaptionMap.put("wdTh", weekDays.get(3));
-        fxIdToCaptionMap.put("wdFr", weekDays.get(4));
-        fxIdToCaptionMap.put("wdSt", weekDays.get(5));
-        fxIdToCaptionMap.put("wdSn", weekDays.get(6));
-        daysPane.getChildren().stream()
-                .filter(node -> (node instanceof RadioButton))
-                .map(node -> (RadioButton) node)
-                .forEach(node -> {
-                    setCaptionById.accept(node);
-                });
-
     }
 
     @FXML
@@ -162,18 +145,21 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
             if (newValue == null) return;
             int newDay = newValue.get(Calendar.DAY_OF_WEEK);
             Node node = daysPane.lookup("#" + dayConstantToId(newDay));
+            node.requestFocus();
             Platform.runLater(() -> weekDaysToggleGroup.selectToggle((Toggle) node));
-         });
+        });
         daysPane.visibleProperty().bind(showWeekGreedProperty());
     }
 
     protected void prepareWeekdays() {
+        DateFormatSymbols symbols = new DateFormatSymbols(getCalendarLocale());
+        List<String> dayNames = asList(symbols.getShortWeekdays()); // size 8, so sublist from 1 to 8
+        setWeekdaysCaptions(dayNames.subList(1,dayNames.size()));
         daysPane.getChildren().stream()
                 .filter(node -> (node instanceof RadioButton))
                 .map(node -> (RadioButton) node)
                 .forEach(node -> {
                     changeStyleFromRadioButtonToToggleButton.accept(node);
-                    setCaptionById.accept(node);
                 });
     }
 
@@ -208,6 +194,27 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
 
     public BooleanProperty showWeekGreedProperty() {
         return showWeekGreed;
+    }
+
+    //oneplace to get Locale
+    private Locale getCalendarLocale() {
+        return datePicker.getLocale();
+    }
+
+    public void setWeekdaysCaptions(List<String> weekDays) {
+        if (weekDays == null) {
+            throw new IllegalArgumentException("weekDays list can not be null");
+        }
+        if (weekDays.size() != 7) {
+            throw new IllegalArgumentException("weekDays list must have size of 7");
+        }
+        ((RadioButton) daysPane.lookup("#wdMo")).setText(weekDays.get(1));
+        ((RadioButton) daysPane.lookup("#wdTu")).setText(weekDays.get(2));
+        ((RadioButton) daysPane.lookup("#wdWd")).setText(weekDays.get(3));
+        ((RadioButton) daysPane.lookup("#wdTh")).setText(weekDays.get(4));
+        ((RadioButton) daysPane.lookup("#wdFr")).setText(weekDays.get(5));
+        ((RadioButton) daysPane.lookup("#wdSt")).setText(weekDays.get(6));
+        ((RadioButton) daysPane.lookup("#wdSn")).setText(weekDays.get(0));
     }
 
     public void setDatePattern(String pattern) {

@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import jfxtras.scene.control.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="VBox" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.*?>
+<?import jfxtras.scene.control.CalendarTextField?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="VBox" xmlns="http://javafx.com/javafx/8.0.40">
     <children>
         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <center>
                 <CalendarTextField fx:id="datePicker" BorderPane.alignment="CENTER" />
             </center>
             <left>
-                <Button fx:id="decDayButton" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#decDayHandle" prefHeight="25.0" text="◄" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                <Button fx:id="decDayButton" contentDisplay="CENTER" ellipsisString="" minHeight="-Infinity" mnemonicParsing="false" onAction="#decDayHandle" prefHeight="25.0" prefWidth="15.0" text="◄" textOverrun="CLIP" BorderPane.alignment="CENTER">
                     <font>
                         <Font name="Arial Bold" size="11.0" />
                     </font>
+               <padding>
+                  <Insets bottom="-10.0" left="-10.0" right="-10.0" top="-10.0" />
+               </padding>
                 </Button>
             </left>
             <right>
-                <Button fx:id="incDayButton" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#incDayHandle" prefHeight="25.0" text="►" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                <Button fx:id="incDayButton" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#incDayHandle" prefHeight="25.0" prefWidth="15.0" text="►" textAlignment="RIGHT" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets left="2.0" />
                     </BorderPane.margin>
                     <font>
                         <Font name="Arial Bold" size="11.0" />
                     </font>
+               <padding>
+                  <Insets bottom="-10.0" left="-10.0" right="-10.0" top="-10.0" />
+               </padding>
                 </Button>
             </right>
         </BorderPane>
