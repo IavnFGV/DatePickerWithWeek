@@ -145,8 +145,11 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
             if (newValue == null) return;
             int newDay = newValue.get(Calendar.DAY_OF_WEEK);
             Node node = daysPane.lookup("#" + dayConstantToId(newDay));
-            node.requestFocus();
-            Platform.runLater(() -> weekDaysToggleGroup.selectToggle((Toggle) node));
+
+            Platform.runLater(() -> {
+                weekDaysToggleGroup.selectToggle((Toggle) node);
+                node.requestFocus();
+            });
         });
         daysPane.visibleProperty().bind(showWeekGreedProperty());
     }
@@ -154,7 +157,7 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
     protected void prepareWeekdays() {
         DateFormatSymbols symbols = new DateFormatSymbols(getCalendarLocale());
         List<String> dayNames = asList(symbols.getShortWeekdays()); // size 8, so sublist from 1 to 8
-        setWeekdaysCaptions(dayNames.subList(1,dayNames.size()));
+        setWeekdaysCaptions(dayNames.subList(1, dayNames.size()));
         daysPane.getChildren().stream()
                 .filter(node -> (node instanceof RadioButton))
                 .map(node -> (RadioButton) node)
