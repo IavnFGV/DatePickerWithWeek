@@ -28,9 +28,9 @@ import static java.util.Arrays.asList;
  * Created by GFH on 23.12.2015.
  */
 public class KrytotaDatePickerCheap extends VBox implements Initializable {
+    private static final String DEF_STYLE_CLASS = "krytota-date-picker-cheap";
     private static String CLASS_RADIO_BUTTON = "radio-button";
     private static String CLASS_TOGGLE_BUTTON = "toggle-button";
-
     @FXML
     protected GridPane daysPane;
     @FXML
@@ -41,19 +41,17 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
     protected Button decButton;
     @FXML
     protected ToggleGroup weekDaysToggleGroup;
-
     private Consumer<RadioButton> changeStyleFromRadioButtonToToggleButton =
             radioButton -> {
                 radioButton.getStyleClass().remove(CLASS_RADIO_BUTTON);
                 radioButton.getStyleClass().add(CLASS_TOGGLE_BUTTON);
             };
     private BooleanProperty showWeekGreed = new SimpleBooleanProperty(true);
-
-
     public KrytotaDatePickerCheap(boolean showWeekGreed) {
         this();
         setShowWeekGreed(showWeekGreed);
     }
+
 
     public KrytotaDatePickerCheap() {
         super();
@@ -67,6 +65,12 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        getStyleClass().add(DEF_STYLE_CLASS);
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return getClass().getResource("krytotaDatePickerCheap.css").toExternalForm();
     }
 
     public CalendarTextField getDatePicker() {

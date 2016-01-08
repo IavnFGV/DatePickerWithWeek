@@ -1,0 +1,6 @@
+.krytota-date-picker-cheap{
+    -fx-skin: "ru.krytota.datepicker.KrytotaDatePickerCheapSkin";
+}
+.daybutton:today{
+    -fx-color: DARKGRAY;
+}
