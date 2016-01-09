@@ -1,0 +1,7 @@
+.date-picker-with-week {
+    -fx-skin: "es.esy.iavnfgv.fx.component.DatePickerWithWeekSkin";
+}
+
+.today {
+    -fx-color: DARKGRAY;
+}

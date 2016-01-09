@@ -1,4 +1,4 @@
-package ru.krytota.datepicker;
+package es.esy.iavnfgv.fx.component.datepicker;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,11 +11,13 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        KrytotaDatePickerCheap krytotaDatePickerCheap = new KrytotaDatePickerCheap();
+        DatePickerWithWeek datePickerWithWeek = new DatePickerWithWeek();
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(krytotaDatePickerCheap, 300.0D, 275.0D));
-//        krytotaDatePickerCheap.setShowWeekGreed(false);
+        primaryStage.setScene(new Scene(datePickerWithWeek, 300.0D, 275.0D));
+//        datePickerWithWeek.setShowWeekGreed(false);
         primaryStage.show();
+
+
     }
 
 

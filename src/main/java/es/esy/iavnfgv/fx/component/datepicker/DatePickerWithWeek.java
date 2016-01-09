@@ -1,4 +1,4 @@
-package ru.krytota.datepicker;
+package es.esy.iavnfgv.fx.component.datepicker;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -27,8 +27,8 @@ import static java.util.Arrays.asList;
 /**
  * Created by GFH on 23.12.2015.
  */
-public class KrytotaDatePickerCheap extends VBox implements Initializable {
-    private static final String DEF_STYLE_CLASS = "krytota-date-picker-cheap";
+public class DatePickerWithWeek extends VBox implements Initializable {
+    private static final String DEF_STYLE_CLASS = "date-picker-with-week";
     private static String CLASS_RADIO_BUTTON = "radio-button";
     private static String CLASS_TOGGLE_BUTTON = "toggle-button";
     @FXML
@@ -47,19 +47,21 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
                 radioButton.getStyleClass().add(CLASS_TOGGLE_BUTTON);
             };
     private BooleanProperty showWeekGreed = new SimpleBooleanProperty(true);
-    public KrytotaDatePickerCheap(boolean showWeekGreed) {
+    private int curWeekDay;
+
+
+    public DatePickerWithWeek(boolean showWeekGreed) {
         this();
         setShowWeekGreed(showWeekGreed);
     }
 
-
-    public KrytotaDatePickerCheap() {
+    public DatePickerWithWeek() {
         super();
-        FXMLLoader fxmlLoader = new FXMLLoader(KrytotaDatePickerCheap.class.getResource(
-                "/ru/krytota/datepicker/krytotaDatePickerCheap.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(DatePickerWithWeek.class.getResource(
+                "/es/esy/iavnfgv/fx/component/datepicker/datePickerWithWeek.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-
+        fxmlLoader.setClassLoader(DatePickerWithWeek.class.getClassLoader());
         try {
             fxmlLoader.load();
         } catch (IOException exception) {
@@ -70,7 +72,7 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
 
     @Override
     public String getUserAgentStylesheet() {
-        return getClass().getResource("krytotaDatePickerCheap.css").toExternalForm();
+        return getClass().getResource("datePickerWithWeek.css").toExternalForm();
     }
 
     public CalendarTextField getDatePicker() {
@@ -147,12 +149,32 @@ public class KrytotaDatePickerCheap extends VBox implements Initializable {
 
         datePicker.calendarProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) return;
+
             int newDay = newValue.get(Calendar.DAY_OF_WEEK);
             Node node = daysPane.lookup("#" + dayConstantToId(newDay));
+
+            Calendar curCalendar = new GregorianCalendar();
+            int curWeek = curCalendar.get(Calendar.WEEK_OF_YEAR);
+            this.curWeekDay = curCalendar.get(Calendar.DAY_OF_WEEK);
+            int datepickerWeek = newValue.get(Calendar.WEEK_OF_YEAR);
+            // TODO REPLACE WITH CORRECT LOGIC or make pseudoclass
+            Node todayNode = daysPane.lookup("#" + dayConstantToId(this.curWeekDay));
 
             Platform.runLater(() -> {
                 weekDaysToggleGroup.selectToggle((Toggle) node);
                 node.requestFocus();
+                if (curWeek == datepickerWeek) {
+                    // styleString = "-fx-background-color:DARKGRAY";
+                    //styleString = "-fx-background-color:-fx-focus-color, -fx-inner-border, -fx-body-color, " +
+                    //      "-fx-faint-focus-color, -fx-body-color;";
+                    if (!todayNode.getStyleClass().contains("today")) {
+                        todayNode.getStyleClass().add("today");
+                    }
+                } else {
+                    if (todayNode.getStyleClass().contains("today")) {
+                        todayNode.getStyleClass().remove("today");
+                    }
+                }
             });
         });
         daysPane.visibleProperty().bind(showWeekGreedProperty());
