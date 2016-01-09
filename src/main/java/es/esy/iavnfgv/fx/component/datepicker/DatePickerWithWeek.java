@@ -31,6 +31,27 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     private static final String DEF_STYLE_CLASS = "date-picker-with-week";
     private static String CLASS_RADIO_BUTTON = "radio-button";
     private static String CLASS_TOGGLE_BUTTON = "toggle-button";
+    private static Map<String, Integer> idToDayConstantMap = new HashMap<>();
+    private static Map<Integer, String> dayConstantToIdMap = new HashMap<>();
+
+    static {
+        idToDayConstantMap.put("wdMo", Calendar.MONDAY);
+        idToDayConstantMap.put("wdTu", Calendar.TUESDAY);
+        idToDayConstantMap.put("wdWd", Calendar.WEDNESDAY);
+        idToDayConstantMap.put("wdTh", Calendar.THURSDAY);
+        idToDayConstantMap.put("wdFr", Calendar.FRIDAY);
+        idToDayConstantMap.put("wdSt", Calendar.SATURDAY);
+        idToDayConstantMap.put("wdSn", Calendar.SUNDAY);
+
+        dayConstantToIdMap.put(Calendar.MONDAY, "wdMo");
+        dayConstantToIdMap.put(Calendar.TUESDAY, "wdTu");
+        dayConstantToIdMap.put(Calendar.WEDNESDAY, "wdWd");
+        dayConstantToIdMap.put(Calendar.THURSDAY, "wdTh");
+        dayConstantToIdMap.put(Calendar.FRIDAY, "wdFr");
+        dayConstantToIdMap.put(Calendar.SATURDAY, "wdSt");
+        dayConstantToIdMap.put(Calendar.SUNDAY, "wdSn");
+    }
+
     @FXML
     protected GridPane daysPane;
     @FXML
@@ -48,7 +69,6 @@ public class DatePickerWithWeek extends VBox implements Initializable {
             };
     private BooleanProperty showWeekGreed = new SimpleBooleanProperty(true);
     private int curWeekDay;
-
 
     public DatePickerWithWeek(boolean showWeekGreed) {
         this();
@@ -114,32 +134,11 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     }
 
     private int idToDayConstant(String id) {
-        switch (id) {
-            case "wdMo": {
-                return Calendar.MONDAY;
-            }
-            case "wdTu": {
-                return Calendar.TUESDAY;
-            }
-            case "wdWd": {
-                return Calendar.WEDNESDAY;
-            }
-            case "wdTh": {
-                return Calendar.THURSDAY;
-            }
-            case "wdFr": {
-                return Calendar.FRIDAY;
-            }
-            case "wdSt": {
-                return Calendar.SATURDAY;
-            }
-            case "wdSn": {
-                return Calendar.SUNDAY;
-            }
-            default: {
-                throw new IllegalArgumentException("Cant match id to day for id = [" + id + "]");
-            }
+        Integer day = idToDayConstantMap.get(id);
+        if (day == null) {
+            throw new IllegalArgumentException("Cant match id to day for id = [" + id + "]");
         }
+        return day;
     }
 
     @FXML
@@ -164,9 +163,6 @@ public class DatePickerWithWeek extends VBox implements Initializable {
                 weekDaysToggleGroup.selectToggle((Toggle) node);
                 node.requestFocus();
                 if (curWeek == datepickerWeek) {
-                    // styleString = "-fx-background-color:DARKGRAY";
-                    //styleString = "-fx-background-color:-fx-focus-color, -fx-inner-border, -fx-body-color, " +
-                    //      "-fx-faint-focus-color, -fx-body-color;";
                     if (!todayNode.getStyleClass().contains("today")) {
                         todayNode.getStyleClass().add("today");
                     }
@@ -193,32 +189,11 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     }
 
     private String dayConstantToId(int day) {
-        switch (day) {
-            case Calendar.MONDAY: {
-                return "wdMo";
-            }
-            case Calendar.TUESDAY: {
-                return "wdTu";
-            }
-            case Calendar.WEDNESDAY: {
-                return "wdWd";
-            }
-            case Calendar.THURSDAY: {
-                return "wdTh";
-            }
-            case Calendar.FRIDAY: {
-                return "wdFr";
-            }
-            case Calendar.SATURDAY: {
-                return "wdSt";
-            }
-            case Calendar.SUNDAY: {
-                return "wdSn";
-            }
-            default: {
-                throw new IllegalArgumentException("Cant match id to day for day = [" + day + "]");
-            }
+        String id = dayConstantToIdMap.get(day);
+        if (id == null) {
+            throw new IllegalArgumentException("Cant match day to id for day = [" + day + "]");
         }
+        return id;
     }
 
     public BooleanProperty showWeekGreedProperty() {
