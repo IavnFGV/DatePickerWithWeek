@@ -71,8 +71,15 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     private int curWeekDay;
 
     public DatePickerWithWeek(boolean showWeekGreed) {
+        this(showWeekGreed, null);
+    }
+
+    public DatePickerWithWeek(boolean showWeekGreed, Locale locale) {
         this();
         setShowWeekGreed(showWeekGreed);
+        if (locale != null) {
+            setLocale(locale);
+        }
     }
 
     public DatePickerWithWeek() {
@@ -144,7 +151,7 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        prepareWeekdays();
+        putDayNames();
 
         datePicker.calendarProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) return;
@@ -173,19 +180,23 @@ public class DatePickerWithWeek extends VBox implements Initializable {
                 }
             });
         });
-        daysPane.visibleProperty().bind(showWeekGreedProperty());
-    }
-
-    protected void prepareWeekdays() {
-        DateFormatSymbols symbols = new DateFormatSymbols(getCalendarLocale());
-        List<String> dayNames = asList(symbols.getShortWeekdays()); // size 8, so sublist from 1 to 8
-        setWeekdaysCaptions(dayNames.subList(1, dayNames.size()));
+        datePicker.localeProperty().addListener((observable, oldValue, newValue) -> {
+                    putDayNames();
+                }
+        );
         daysPane.getChildren().stream()
                 .filter(node -> (node instanceof RadioButton))
                 .map(node -> (RadioButton) node)
                 .forEach(node -> {
                     changeStyleFromRadioButtonToToggleButton.accept(node);
                 });
+        daysPane.visibleProperty().bind(showWeekGreedProperty());
+    }
+
+    protected void putDayNames() {
+        DateFormatSymbols symbols = new DateFormatSymbols(getCalendarLocale());
+        List<String> dayNames = asList(symbols.getShortWeekdays()); // size 8, so sublist from 1 to 8
+        setWeekdaysCaptions(dayNames.subList(1, dayNames.size()));
     }
 
     private String dayConstantToId(int day) {
@@ -231,6 +242,14 @@ public class DatePickerWithWeek extends VBox implements Initializable {
 
     public void setShowWeekGreed(boolean showWeekGreed) {
         this.showWeekGreed.set(showWeekGreed);
+    }
+
+    public Locale getLocale() {
+        return datePicker.getLocale();
+    }
+
+    public void setLocale(Locale locale) {
+        datePicker.setLocale(locale);
     }
 }
 
