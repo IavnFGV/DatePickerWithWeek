@@ -1,6 +1,16 @@
 # use java support.
 language: java
+
+sudo: required
+
 jdk:
   - oraclejdk8
+
+install: true
+
+script:
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer
+  - java -version
+
 os:
   - linux
