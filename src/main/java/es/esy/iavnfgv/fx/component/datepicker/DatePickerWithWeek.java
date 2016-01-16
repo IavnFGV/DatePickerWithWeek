@@ -1,6 +1,5 @@
 package es.esy.iavnfgv.fx.component.datepicker;
 
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -94,6 +93,7 @@ public class DatePickerWithWeek extends VBox implements Initializable {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+
         getStyleClass().add(DEF_STYLE_CLASS);
     }
 
@@ -152,33 +152,30 @@ public class DatePickerWithWeek extends VBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         putDayNames();
-
         datePicker.calendarProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) return;
-
-            int newDay = newValue.get(Calendar.DAY_OF_WEEK);
-            Node node = daysPane.lookup("#" + dayConstantToId(newDay));
-
+            int newDay;
+            int datepickerWeek;
             Calendar curCalendar = new GregorianCalendar();
             int curWeek = curCalendar.get(Calendar.WEEK_OF_YEAR);
+            Node node = null;
+            if (newValue == null) {
+                datepickerWeek = curWeek;
+            } else {
+                newDay = newValue.get(Calendar.DAY_OF_WEEK);
+                datepickerWeek = newValue.get(Calendar.WEEK_OF_YEAR);
+                node = daysPane.lookup("#" + dayConstantToId(newDay));
+                node.requestFocus();
+            }
+            weekDaysToggleGroup.selectToggle((Toggle) node);
             this.curWeekDay = curCalendar.get(Calendar.DAY_OF_WEEK);
-            int datepickerWeek = newValue.get(Calendar.WEEK_OF_YEAR);
+
             // TODO REPLACE WITH CORRECT LOGIC or make pseudoclass
             Node todayNode = daysPane.lookup("#" + dayConstantToId(this.curWeekDay));
-
-            Platform.runLater(() -> {
-                weekDaysToggleGroup.selectToggle((Toggle) node);
-                node.requestFocus();
-                if (curWeek == datepickerWeek) {
-                    if (!todayNode.getStyleClass().contains("today")) {
-                        todayNode.getStyleClass().add("today");
-                    }
-                } else {
-                    if (todayNode.getStyleClass().contains("today")) {
-                        todayNode.getStyleClass().remove("today");
-                    }
-                }
-            });
+            if (curWeek == datepickerWeek) {
+                markTodayDay(todayNode);
+            } else {
+                unMarkTodayDay(todayNode);
+            }
         });
         datePicker.localeProperty().addListener((observable, oldValue, newValue) -> {
                     putDayNames();
@@ -191,6 +188,10 @@ public class DatePickerWithWeek extends VBox implements Initializable {
                     changeStyleFromRadioButtonToToggleButton.accept(node);
                 });
         daysPane.visibleProperty().bind(showWeekGreedProperty());
+        Calendar curCalendar = new GregorianCalendar();
+        this.curWeekDay = curCalendar.get(Calendar.DAY_OF_WEEK);
+        Node todayNode = daysPane.lookup("#" + dayConstantToId(this.curWeekDay));
+        markTodayDay(todayNode);
     }
 
     protected void putDayNames() {
@@ -205,6 +206,18 @@ public class DatePickerWithWeek extends VBox implements Initializable {
             throw new IllegalArgumentException("Cant match day to id for day = [" + day + "]");
         }
         return id;
+    }
+
+    protected void markTodayDay(Node todayNode) {
+        if (!todayNode.getStyleClass().contains("today")) {
+            todayNode.getStyleClass().add("today");
+        }
+    }
+
+    protected void unMarkTodayDay(Node todayNode) {
+        if (todayNode.getStyleClass().contains("today")) {
+            todayNode.getStyleClass().remove("today");
+        }
     }
 
     public BooleanProperty showWeekGreedProperty() {
