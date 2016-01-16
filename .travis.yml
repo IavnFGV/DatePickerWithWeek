@@ -1,0 +1,6 @@
+# use java support.
+language: java
+jdk:
+  - oraclejdk8
+os:
+  - linux
